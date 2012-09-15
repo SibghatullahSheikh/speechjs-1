@@ -1,0 +1,58 @@
+* {
+    border: none;
+
+    font: inherit;
+    color: inherit;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Helvetica, Arial;
+}
+
+#demo {
+    height: 300px;
+    background: #333;
+    padding: 0 200px;
+
+    color: #fff;
+}
+    form {
+        width: 100px;
+        height: 100px;
+        margin: 50px auto;
+    }
+    h1 {
+        margin: 0;
+        padding-top: 10px;
+        font-size: 2.5em;
+    }
+    h4 {
+        margin: 0;
+        font-size: 1.4em;
+    }
+
+#docs {
+    padding: 0 50px;
+}
+
+@media screen and (max-width: 950px) {
+    #demo {
+        padding: 0 50px;
+    }
+    #docs {
+        padding: 0 20px;
+    }
+}
+@media screen and (max-width: 550px) {
+    #docs, #demo {
+        padding: 0 10px;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    h4 {
+        font-size: 1.2em;
+    }
+}

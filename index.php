@@ -1,0 +1,191 @@
+<!DOCTYPE HTML>
+<!--        \
+     __/|  \ \
+    |__ | | | |
+       \|  / /
+            /
+
+    Welcome at the documentation of Speech.js. Read on for more information!
+-->
+<html lang="nl">
+<head>
+    <!-- This is boring code, let's jump over to the real work! -->
+	<meta charset="UTF-8">
+	<title>Website met speech navigatie</title>
+    <link rel="stylesheet" href="css/style.css">
+
+    <!-- THE STYLE OF THE BUTTON
+        Speech.js is only the base of your speech app. You need to style
+        the input your self, yes you read it correct it is an input not
+        a button. We just remove the border and the text 
+        (by adding ``color: transparent``) and we style it like a nice
+        button. The microphone icon is delivered by Chrome.
+    -->
+    <style>
+        #speech {
+            width: 71px;
+            height: 100px;
+            border: none;
+            background: #c33;
+            color: transparent;
+            font-size: 50px;
+            padding-right: 29px;
+            border-radius: 50%;
+
+            outline: none !important;
+            cursor: pointer;
+        }
+        /* 
+           This is for styling the border around the button when you speak.
+           because CSS can handle only one border we use 3 shadows (red, white, red)
+           without blur for the borders
+         */
+        #speech.active {
+            box-shadow: 0 0 0 5px #333,
+                        0 0 0 10px #c33,
+                        0 0 0 14px #333,
+                        0 0 0 17px #c33;
+        }
+    </style>
+</head>
+<body>
+    <section id=demo>
+        <!-- Just a title to let us know on which page we are -->
+        <h1>Welcome at the '<span id=page></span>' page</h1>
+
+        <!--
+            This is our form, the input#speech is our button to activate
+            Speech.js
+        -->
+        <form>
+            <input type=text id=speech>
+        </form>
+
+        <!-- A small heading which will be updated with the text -->
+        <h4>You said: "<cite id=txt></cite>"</h4>
+    </section>
+
+    <!-- some text which isn't important for Speech.js -->
+    <section id=docs>
+        <h3>How to use this demo?</h3>
+        <p>Here you can test Speech.js, a small JavaScript libary for making speech applications.<br>
+        Some things you can do/test:
+        <ul>
+            <li><em>Navigate</em> - Say one of this three sentences to navigate to this site (the pagename appears in the top heading):
+            <ul>
+                <li>Go to home / Ga naar home</li>
+                <li>Go to about / Ga naar about</li>
+                <li>Go to contact / Ga naar contact</li>
+                <li>Go to github / Ga naar github - <em>An example of external navigation</em></li>
+            </ul>
+            </li>
+            <li><em>Talk to your website</em> - You can talk to your website and it will response:
+            <ul>
+                <li>Tell something about you / Vertel wat over jezelf</li>
+                <li>I want to mail you / Ik wil je mailen</li>
+            </ul>
+            </li>
+            <li><em>Use placeholders</em> - You can even use placeholders:
+            <ul>
+                <li>google speech.js - <em>Search on google for 'speech.js'</em></li>
+            </ul>
+            </li>
+        </ul></p>   
+
+        <h3>How can I use Speech.js?</h3>
+        <p>Take a look in the source code for information about this libary</p>
+    </section>
+
+    <!-- THE JS
+         We begin by including speech.js in our HTML page
+    -->
+    <script src=speech.js></script>
+    <script>
+        // check if speech is suppoted, currently only on Chrome
+        if (Speech.isSupported) {
+            alert('This demo current only works on Chrome');
+        }
+        /* 
+            The input, cite and clicks variables are created for handling
+            on click events and updating the spoken text
+         */
+        var input = document.querySelector('#speech'),
+            cite = document.querySelector('#txt'),
+            clicks = 0,
+
+            /*
+                Here, we initializen our Speech app. This method is very 
+                powerfull. It needs to have an input element as first parameter.
+                This can be an Node (this is what we have now) or a CSS 
+                selector supported by `document.querySelector()`.
+                This input needs to have a x-webkit-speech attribute in 
+                order to work. If it doesn't have one this method will add it.
+             */
+            speech = new Speech(input);
+
+        /*
+           This is the place where we register the *go to* actions. This
+           means sentences like 'go to welcome' or 'ga naar contant' (dutch).
+           It will match any sentence that has the words 'go' or 'ga' and
+           the the page name.
+         */
+        speech.action.goTo({
+            home: 'index.php#welcome',
+            about: 'index.php#about',
+            contact: 'index.php#contact'
+        });
+
+        /*
+           Here we register our sentences. This only will match if the sentence
+           is exactly matching the input.
+         */
+        speech.action.sentence({
+            'tell something about you': 'index.php#about',
+            'vertel wat over jezelf': 'index.php#about',
+            'i want to mail you': 'index.php#contact',
+            'ik wil je mailen': 'index.php#contact',
+            /*
+               Here, we see an interesting example. These string go trough
+               to RegExp object, so you can include parameters and REGEX characters.
+               These parameters will be parsed in the url like a normal replace.
+             */
+            'google (.*)$': 'http://google.com/search?q=$1'
+        });
+
+        /* The onclick event on the input */
+        input.onclick = function(e) {
+            if (++clicks < 2) {
+                // if we click once it will activate the speech box, so 
+                // don't do anything.
+                this.classList.add('active');
+                return;
+            } else if(clicks == 2) {
+                // if we click twice we have spoken, so remove the active class
+                // and do something (and reset the clicks).
+                this.classList.remove('active');
+                clicks = 0;
+            }
+
+            // don't show the speech box again
+            e.preventDefault();
+
+            // put the text on the innerText
+            cite.innerText = input.value;
+
+            // we have set a 500ms timeout, so we can read the sentence
+            setTimeout(function() {
+                // this activates Speech.js and it will look if anything maches and
+                // handle everything.
+                speech.call();
+
+                // display the page name in the heading, this is just for the demo
+                document.querySelector('#page').innerText = window.location.hash.substr(1);
+            }, 500);
+        };
+    </script>
+
+    <!-- This script is for displaying the current page in the heading, this is only for the demo -->
+    <script>
+    </script>
+</body>
+</html>
