@@ -3,6 +3,8 @@
 Welcome at Speech.js, a small library that helps you creating a speech 
 recognion application.
 
+![image](http://wouterj.github.com/speechjs/img/logo-whitebg.png)
+
 ## Documentation
 
 Read the source code of [the index.html file](https://github.com/WouterJ/speechjs/blob/master/index.html) 
