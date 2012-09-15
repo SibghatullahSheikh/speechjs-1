@@ -130,9 +130,9 @@
            the the page name.
          */
         speech.action.goTo({
-            home: 'index.php#welcome',
-            about: 'index.php#about',
-            contact: 'index.php#contact'
+            home: 'index.html#welcome',
+            about: 'index.html#about',
+            contact: 'index.html#contact'
         });
 
         /*
@@ -140,10 +140,10 @@
            is exactly matching the input.
          */
         speech.action.sentence({
-            'tell something about you': 'index.php#about',
-            'vertel wat over jezelf': 'index.php#about',
-            'i want to mail you': 'index.php#contact',
-            'ik wil je mailen': 'index.php#contact',
+            'tell something about you': 'index.html#about',
+            'vertel wat over jezelf': 'index.html#about',
+            'i want to mail you': 'index.html#contact',
+            'ik wil je mailen': 'index.html#contact',
             /*
                Here, we see an interesting example. These string go trough
                to RegExp object, so you can include parameters and REGEX characters.
