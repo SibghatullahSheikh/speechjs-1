@@ -36,6 +36,10 @@ body {
 #docs {
     padding: 0 50px;
 }
+	h3 {
+		font-size: 1.2em;
+		font-weight: bold;
+	}
 
 @media screen and (max-width: 950px) {
     #demo {
